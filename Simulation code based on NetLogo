@@ -1,0 +1,1082 @@
+extensions [ gis profiler ]
+breed [ scenic-areas
+        scenic-area;景点
+]
+breed [ entrepreneurs
+        entrepreneur;创业者
+]
+breed [ tourists
+        tourist;旅游者
+]
+breed [ innovation-1s
+        innovation-1;自主创新效果
+]
+breed [ innovation-2s
+        innovation-2;模仿创新效果
+]
+breed [jianyan-hs
+       jianyan-h];现实数据
+scenic-areas-own [ hot;热度
+]
+entrepreneurs-own [ innovation-preference;创新偏好
+                    innovation-ability;创新能力
+                    social-relations;社会关系
+                    floating-capital;经营资金
+                    operating-expense;经营支出
+                    product-price;产品价格
+                    operating-pressure;经营压力
+                    willingness-to-innovate-independently;自主创新意愿
+                    innovate;创新标记
+                    willingness-to-imitate-innovation;模仿创新意愿
+                    overflow-effect;溢出效应
+                    effect-of-innovation;创新效果
+                    effect-of-independent-innovation;自主创新效果
+                    effect-of-imitation-innovation;模仿创新效果
+                    innovation-cost;创新成本
+                    income;收入
+                    income-j;净收入
+                    times;消费人次
+                    new?;是否为新企业
+                    years;存在时间
+                    ri;最邻近距离
+                    chenggong-2?;两格覆盖率
+                    chenggong-5?;五格覆盖率
+                    wailai?;外来创业者
+                    zizhuchuangxin-num;自主创新次数
+                    mofangchuangxin-num;模仿创新次数
+]
+tourists-own [income-lever;消费水平
+              consumption-preference;消费偏好
+              xiaofei-h;高消费指数
+              xiaofei-l;低消费指数
+]
+innovation-1s-own [effect-of-independent-innovation;自主创新效果
+                   exist-time;存在时间
+                   wailai?;外来创业者
+]
+innovation-2s-own [effect-of-imitation-innovation;模仿创新效果
+                   exist-time;存在时间
+                   wailai?;外来创业者
+]
+jianyan-hs-own [fugai-2?;两格覆盖率
+                fugai-5?;五格覆盖率
+]
+patches-own [ transport;交通通达度
+              attract;吸引度
+              not-vacancy?;是否被占据？
+              renkou;人口
+              gridcode;地形
+              p-effect-of-innovation;创新效果
+              p-times;消费人次
+              p-product-price;价格
+              xuanzhi;选址
+              qiyexuanzhi;企业选址指标
+              jieguo;结果变量
+]
+globals [ loadone;一级公路
+          loadtwo;二级公路
+          loadthree;三级公路
+          yixian;黟县边界
+          qianzaiyongdi;潜在用地区块
+          jingqu;景区POI
+          hotel;酒店POI
+          jianyanshuju;仿真数据POI
+          xianshi-2;两格现实覆盖率
+          xianshi-5;五格现实覆盖率
+          chenggonglv-2;两格仿真成功率
+          chenggonglv-5;五格仿真成功率
+          fugailv-2;两格覆盖率
+          fugailv-5;五格覆盖率
+          renkou-data;人口数据
+          one;一级公路区块
+          two;二级公路区块
+          three;三级公路区块
+          border;边界
+          qiye;企业
+          qiye-2012;2012年企业
+          selection-time;选择次数
+          tingzhi?;停止
+          new-innovations-1;新自主创新
+          new-innovations-2;新模仿创新
+          new-innovations-1-d;新当地自主创新
+          new-innovations-2-d;新当地模仿创新
+          new-innovations-1-w;新外来自主创新
+          new-innovations-2-w;新外来模仿创新
+          deal;成交
+          num-deal;成交量
+          mean-income;平均收入
+          new;新创业企业数量
+          new-d;当地新增企业
+          new-w;外来新增企业
+          tourists-num;游客量
+          number;数据编号
+          increase;增长率编号
+          rate-innovate-independently-increase;创新比例递增
+          tourist-increase;月游客增长率
+          income-lever-read;动态游客消费水平
+          income-lever-increase;月游客消费水平增长率
+          operating-expense-read-d;动态当地经营支出水平
+          operating-expense-read-w;动态外来经营支出水平
+          operating-expense-increase;月经营支出增长率
+          effect-of-innovation-read-d;动态当地产品价格水平
+          effect-of-innovation-read-w;动态外来产品价格水平
+          product-price-increase;月产品价格增长率
+          operating-expense-increase-d;当月经营支出增长率
+          product-price-increase-d;当月产品价格增长率
+          r;最近邻指数
+          re;均匀分布指数倒数
+          death-total-num;破产总数
+          death-zizhu;破产企业自主创新总数
+          death-mofang;破产企业模仿创新总数
+          mean-zizhu;
+          mean-mofang;
+          death-total-num-d;当地破产总数
+          death-zizhu-d;当地破产企业自主创新总数
+          death-mofang-d;当地破产企业模仿创新总数
+          mean-zizhu-d
+          mean-mofang-d
+          death-total-num-w;外来破产总数
+          death-zizhu-w;外来破产企业自主创新总数
+          death-mofang-w;外来破产企业模仿创新总数
+          mean-zizhu-w
+          mean-mofang-w
+          death-n;破产企业数量
+          death-d;当地破产企业计数
+          death-n-d;当地破产企业数量
+          death-w;外来破产企业计数
+          death-n-w;外来破产企业数量
+          mean-independent;平均自主创新
+          mean-independent-d;平均当地自主创新
+          mean-independent-w;平均外来自主创新
+          mean-imitation;平均模仿创新
+          mean-imitation-d;平均当地模仿创新
+          mean-imitation-w;平均外来模仿创新
+          x;百分之25企业数
+          x-d;当地百分之25企业
+          x-w;外来百分之25企业
+          price-25
+          price-75;总体价格
+          price-25-d
+          price-75-d;当地价格
+          price-25-w
+          price-75-w;外来价格
+          years-25
+          years-75;企业存在时间
+          income-j-25-d
+          income-j-75-d;当地净利润
+          income-j-25-w
+          income-j-75-w;外来净利润
+]
+
+to jishi
+  profiler:start
+  setup
+  Initializing-the-operator
+  repeat 20 [go-once]
+  profiler:stop
+  output-print profiler:report
+  profiler:reset
+end
+
+to setup
+  clear-all
+  set selection-time 0
+  set tingzhi? false
+  set deal 0
+  set num-deal 0
+  set mean-income 0
+  set death-n 0
+  set death-d 0
+  set death-n-d 0
+  set death-w 0
+  set death-n-w 0
+  set tourist-increase 1
+  set income-lever-increase 1
+  set operating-expense-increase 1
+  set product-price-increase 1
+  set operating-expense-increase-d 1
+  set product-price-increase-d 1
+  set death-total-num 0
+  set death-zizhu 0
+  set death-mofang 0
+  set death-total-num-d 0
+  set death-zizhu-d 0
+  set death-mofang-d 0
+  set death-total-num-w 0
+  set death-zizhu-w 0
+  set death-mofang-w 0
+  ;导入gis数据，并创建映射
+  set loadone gis:load-dataset "data/loadone.shp"
+  set one patch-set patches gis:intersecting loadone
+  set loadtwo gis:load-dataset "data/loadtwo.shp"
+  set two patch-set patches gis:intersecting loadtwo
+  set loadthree gis:load-dataset "data/loadthree.shp"
+  set three patch-set patches gis:intersecting loadthree
+  set yixian gis:load-dataset "data/yixian.shp"
+  set border patch-set patches gis:intersecting yixian
+  set jingqu gis:load-dataset "data/jingqu.shp"
+  gis:create-turtles-from-points jingqu scenic-areas [set shape "building store" set size 7]
+  set hotel gis:load-dataset "data/2022.shp"
+  set qianzaiyongdi patch-set patches gis:intersecting gis:load-dataset "data/qianziyongdi.shp"
+  set qiye-2012 patch-set patches gis:intersecting gis:load-dataset "data/tourism-2012-1.shp"
+  ;导入人口数据
+  set renkou-data gis:load-dataset "data/renkou.shp"
+  gis:apply-coverage renkou-data "VALUE" renkou
+  gis:apply-coverage gis:load-dataset "data/dixing.shp" "GRIDCODE" gridcode  ;导入地形数据
+  ask patches [ifelse renkou > 0 [set renkou renkou / 100] [set renkou 0]
+               ifelse gridcode > 0 [set gridcode gridcode / 10] [set gridcode 0]
+               set p-times 0
+               set attract 0
+               set qiyexuanzhi 0
+               set pcolor white
+               set transport 0
+               set not-vacancy? true]
+  ;设置边界
+  gis:set-world-envelope (gis:envelope-of yixian)
+  ;绘制地图
+  display-ditu
+  ;设置区块道路通达度属性
+  ask three [ask patches in-radius 20 [ set transport transport + 0.001 ]
+             ask patches in-radius 8 [ set transport transport + 0.1 ]
+             ask patches in-radius 4 [ set transport transport + 0.2 ]
+             ask patches in-radius 2 [ set transport transport + 0.3 ]]
+  ask two [ask patches in-radius 20 [ set transport transport + 0.001 ]
+           ask patches in-radius 10 [ set transport transport + 0.1 ]
+           ask patches in-radius 6 [ set transport transport + 0.2 ]
+           ask patches in-radius 3 [ set transport transport + 0.6 ]]
+  ask one [ask patches in-radius 20 [ set transport transport + 0.001 ]
+           ask patches in-radius 12 [ set transport transport + 0.2 ]
+           ask patches in-radius 8 [ set transport transport + 0.4 ]
+           ask patches in-radius 4 [ set transport transport + 0.8 ]]
+  ;设置区块吸引度
+  ask scenic-areas [ask patches in-radius (70 * hot / 6) [ set attract (attract + [hot] of myself) ]
+                    ask patches in-radius (40 * hot / 6) [ set attract (attract + [hot] of myself * 8) ]
+                    ask patches in-radius (20 * hot / 6) [ set attract (attract + [hot] of myself * 15) ]]
+  set number 0
+  set rate-innovate-independently-increase 0
+  ;覆盖率检验
+  gis:create-turtles-from-points hotel jianyan-hs [set shape "circle" set size 0.1 set color white set fugai-2? false set fugai-5? false]
+  ;计算企业选址指标
+  ask qianzaiyongdi [set qiyexuanzhi ((0.9 - exp (-(attract / 200 * A1 + transport / 70 * B1 + renkou / 30 * C - gridcode))) * 10)]
+  reset-ticks
+end
+
+to reset;重置环境
+  clear-all-plots
+  clear-turtles
+  ;覆盖率检验
+  gis:create-turtles-from-points hotel jianyan-hs [set shape "circle" set size 0.1 set color white set fugai-2? false set fugai-5? false]
+  gis:create-turtles-from-points jingqu scenic-areas [set shape "building store" set size 7]
+  set selection-time 0
+  set deal 0
+  set num-deal 0
+  set new-innovations-1 0
+  set new-innovations-2 0
+  set new 0
+  set mean-income 0
+  set tourists-num 0
+  set death-n 0
+  set death-d 0
+  set death-n-d 0
+  set death-w 0
+  set death-n-w 0
+  set tourist-increase 1
+  set income-lever-increase 1
+  set operating-expense-increase 1
+  set product-price-increase 1
+  set operating-expense-increase-d 1
+  set product-price-increase-d 1
+  set death-total-num 0
+  set death-zizhu 0
+  set death-mofang 0
+  set death-total-num-d 0
+  set death-zizhu-d 0
+  set death-mofang-d 0
+  set death-total-num-w 0
+  set death-zizhu-w 0
+  set death-mofang-w 0
+  set tingzhi? false
+  ask patches[set not-vacancy? true
+              set p-effect-of-innovation 0
+              set p-times 0
+              set p-product-price 0]
+  reset-ticks
+end
+
+to daochupoi;导出POI数据
+  gis:store-dataset gis:turtle-dataset entrepreneurs (word "定稿数据/" wenjianjia "/POI/" number ".shp")
+end
+
+to daochujieguo
+  gis:store-dataset gis:patch-dataset qiyexuanzhi "qiyexuanzhi.asc"
+end
+
+to daochuditu;导出地图图片
+  export-view (word "定稿数据/" wenjianjia "/地图/" number ".png")
+end
+
+to daochushuju;导出表格数据
+  export-all-plots (word "定稿数据/" wenjianjia "/表格/" number ".csv")
+end
+
+to daochujiemian;导出界面
+  export-interface (word "定稿数据/" wenjianjia "/" number ".png")
+end
+
+to daochuchongfu
+  gis:store-dataset gis:turtle-dataset entrepreneurs (word "重复仿真/POI/" increase "-" number ".shp")
+  export-view (word "重复仿真/地图/" increase "-" number ".png")
+  export-all-plots (word "重复仿真/表格/" increase "-" number ".csv")
+  export-interface (word "重复仿真/" increase "-" number ".png")
+end
+
+to display-ditu
+  gis:set-drawing-color black
+  gis:draw yixian 1
+  gis:set-drawing-color blue
+  gis:draw loadone 1
+  gis:set-drawing-color green
+  gis:draw loadtwo 1
+  gis:set-drawing-color gray
+  gis:draw loadthree 1
+end
+
+to display-hotel;现实酒店对照
+  gis:set-drawing-color blue
+  gis:draw hotel 1
+end
+
+to display-map;初始地图
+  clear-drawing
+  ask patches [set pcolor white]
+  display-ditu
+end
+
+to display-transport;交通通达度展示图
+  let x1 max [transport] of patches
+  let distance-x1 x1 / 5
+  ask patches [set pcolor 19.9 - transport / distance-x1]
+end
+
+to display-attract;吸引度展示图
+  let x2 max [attract] of patches
+  let distance-x2 x2 / 5
+  ask patches [set pcolor 69.9 - attract / distance-x2]
+end
+
+to display-renkou;人口密度展示图
+  let x3 max [renkou] of patches
+  let distance-x3 x3 / 5
+  ask patches [set pcolor 29.9 - renkou / distance-x3]
+end
+
+to display-xuanzhi;选址展示图
+  let x4 max [qiyexuanzhi] of patches
+  let xuanzhi-x4 x4 / 5
+  ask patches [set pcolor 109.9 - qiyexuanzhi / xuanzhi-x4]
+end
+
+to display-jieguo;结果展示图
+  ask patches [set jieguo count entrepreneurs in-radius 100]
+  let x5 max [jieguo] of patches
+  let jieguo-x5 x5 / 5
+  ask patches [set pcolor 19.9 - jieguo / jieguo-x5]
+end
+
+
+to Initializing-the-operator;初始化2012年经营者
+  ask qiye-2012
+  [if not-vacancy?
+    [sprout-entrepreneurs 1
+      [ set size 1.5
+        set shape "circle"
+        set color red
+        set years 0
+        set innovation-preference random-normal innovation-preference-d 0.19759
+        set innovation-ability random-normal innovation-ability-d 0.18103
+        set social-relations random-normal social-relations-d 0.15578
+        set floating-capital random-gamma (floating-capital-d * floating-capital-d / 40) (floating-capital-d / 40)
+        set operating-expense random-gamma (operating-expense-d * operating-expense-d / 1.2) (operating-expense-d / 1.2)
+        set effect-of-innovation random-gamma (effect-of-innovation-d * effect-of-innovation-d / 500) (effect-of-innovation-d / 500)
+        set chenggong-2? false
+        set chenggong-5? false
+        set wailai? false
+        set zizhuchuangxin-num 0
+        set mofangchuangxin-num 0
+      ]
+    set not-vacancy? false
+    ]
+  ]
+  ask entrepreneurs
+  [while [innovation-preference < 0 or innovation-preference > 1]
+    [set innovation-preference random-normal innovation-preference-d 0.19759]
+   while [innovation-ability < 0 or innovation-ability > 1]
+    [set innovation-ability random-normal innovation-ability-d 0.18103]
+   while [social-relations < 0 or social-relations > 1]
+    [set social-relations random-normal social-relations-d 0.15578]
+   while [floating-capital < 1 or floating-capital > 50]
+    [set floating-capital random-gamma (floating-capital-d * floating-capital-d / 40) (floating-capital-d / 40)]
+   while [operating-expense < 0.5 or operating-expense > 8]
+    [set operating-expense random-gamma (operating-expense-d * operating-expense-d / 1.2) (operating-expense-d / 1.2)]
+   while [effect-of-innovation < 50 or effect-of-innovation > 3000]
+    [set effect-of-innovation random-gamma (effect-of-innovation-d * effect-of-innovation-d / 500) (effect-of-innovation-d / 500)]
+   ;计算初始创新意愿
+   set innovate 11
+   set new? false
+   set operating-pressure 0
+   set overflow-effect 0
+   set willingness-to-innovate-independently 0
+   set willingness-to-imitate-innovation 0
+   set product-price random-normal effect-of-innovation 10
+  ]
+end
+
+to go-once;一次模拟
+  if chuangxing?;是否创新
+  [zizhuchuangxin
+  mofangchuangxin]
+  youkechuyou
+  youkexiaofei
+  qiyeshouru
+  qiyetuichu
+  jisuanbiandonglv
+  chuangxinbiaoji
+  jianyan
+  creation-the-operator
+  tick
+  if ticks = 120[stop]
+end
+
+to go-repeat;重复模拟
+  if number = 0[set number 1]
+  Initializing-the-operator
+  repeat 120[
+  if chuangxing?;是否创新
+  [zizhuchuangxin
+  mofangchuangxin]
+  youkechuyou
+  youkexiaofei
+  qiyeshouru
+  qiyetuichu
+  jisuanbiandonglv
+  chuangxinbiaoji
+  jianyan
+  creation-the-operator
+  tick]
+  daochupoi
+  daochuditu
+  daochushuju
+  daochujiemian
+  reset
+  set number number + 1
+  if number > set-number[stop]
+end
+
+to go-increase;递增模拟
+  repeat 60[
+    if number = 0[set number 1]
+      Initializing-the-operator
+      repeat 120[
+      zizhuchuangxin-increase
+      mofangchuangxin-increase
+      youkechuyou
+      youkexiaofei
+      qiyeshouru
+      qiyetuichu
+      jisuanbiandonglv
+      chuangxinbiaoji
+      jianyan
+      creation-the-operator
+      tick]
+      output-write tourists-num
+      output-write num-deal
+      output-write r
+      output-write count entrepreneurs with [not wailai?]
+      output-write count entrepreneurs with [wailai?]
+      daochuchongfu
+      reset
+      set number number + 1]
+  output-print increase
+  set increase increase + 0.1
+  set number 0
+  if increase > increase-number[stop]
+end
+
+to zizhuchuangxin;自主创新成本、效果、产品价格及营业资本（产生新代理用于记录创新效果，对周边区块产生影响）
+  ask max-n-of (int (count entrepreneurs * rate-innovate-independently * J / 100)) entrepreneurs [willingness-to-innovate-independently]
+  [if innovate >= 8
+  [set innovation-cost (floating-capital * (1 - exp (-(innovation-preference))) * F)
+    set effect-of-independent-innovation innovation-cost * ((exp innovation-ability) - 1) * D
+    set effect-of-innovation effect-of-innovation + (effect-of-independent-innovation)
+    set product-price product-price + (random-normal effect-of-independent-innovation 10)
+    set operating-expense operating-expense + ((random-normal effect-of-independent-innovation 10) / 300)
+    set floating-capital floating-capital - innovation-cost
+    set innovate 0
+    set zizhuchuangxin-num zizhuchuangxin-num + 1
+    hatch-innovation-1s 1
+      [ set size 0.1
+        set shape "circle"
+        set color red
+        set effect-of-independent-innovation [effect-of-independent-innovation] of myself
+        set exist-time 0
+        set wailai? [wailai?] of myself
+      ]
+  ]]
+  set new-innovations-1 count innovation-1s with [exist-time = 0]
+  ifelse new-innovations-1 > 0[set mean-independent mean [effect-of-independent-innovation] of innovation-1s with [exist-time = 0]][set mean-independent 0]
+  set new-innovations-1-d count innovation-1s with [exist-time = 0 and not wailai?]
+  ifelse new-innovations-1-d > 0[set mean-independent-d mean [effect-of-independent-innovation] of innovation-1s with [exist-time = 0 and not wailai?]][set mean-independent-d 0]
+  set new-innovations-1-w count innovation-1s with [exist-time = 0 and wailai?]
+  ifelse new-innovations-1-w > 0[set mean-independent-w mean [effect-of-independent-innovation] of innovation-1s with [exist-time = 0 and wailai?]][set mean-independent-w 0]
+end
+
+to zizhuchuangxin-increase;自主创新成本、效果、产品价格及营业资本（产生新代理用于记录创新效果，对周边区块产生影响）-创新比例递增
+  ask max-n-of (int (count entrepreneurs * rate-innovate-independently * increase * J / 100)) entrepreneurs [willingness-to-innovate-independently]
+  [if innovate >= 8
+  [set innovation-cost (floating-capital * (1 - exp (-(innovation-preference))) * F)
+    set effect-of-independent-innovation innovation-cost * ((exp innovation-ability) - 1) * D
+    set effect-of-innovation effect-of-innovation + (effect-of-independent-innovation)
+    set product-price product-price + (random-normal effect-of-independent-innovation 10)
+    set operating-expense operating-expense + ((random-normal effect-of-independent-innovation 10) / 300)
+    set floating-capital floating-capital - innovation-cost
+    set innovate 0
+    set zizhuchuangxin-num zizhuchuangxin-num + 1
+    hatch-innovation-1s 1
+      [ set size 0.1
+        set shape "circle"
+        set color red
+        set effect-of-independent-innovation [effect-of-independent-innovation] of myself
+        set exist-time 0
+        set wailai? [wailai?] of myself
+      ]
+  ]]
+  set new-innovations-1 count innovation-1s with [exist-time = 0]
+  ifelse new-innovations-1 > 0[set mean-independent mean [effect-of-independent-innovation] of innovation-1s with [exist-time = 0]][set mean-independent 0]
+  set new-innovations-1-d count innovation-1s with [exist-time = 0 and not wailai?]
+  ifelse new-innovations-1-d > 0[set mean-independent-d mean [effect-of-independent-innovation] of innovation-1s with [exist-time = 0 and not wailai?]][set mean-independent-d 0]
+  set new-innovations-1-w count innovation-1s with [exist-time = 0 and wailai?]
+  ifelse new-innovations-1-w > 0[set mean-independent-w mean [effect-of-independent-innovation] of innovation-1s with [exist-time = 0 and wailai?]][set mean-independent-w 0]
+end
+
+to mofangchuangxin;模仿创新（产生新代理记录创新效果，对周边产生影响，使模仿创新层层递进）
+ ask entrepreneurs
+  [if innovate >= 10 and willingness-to-imitate-innovation > 0 and ((1 - exp (- willingness-to-imitate-innovation)) * 100) > random (100 / J)
+     [ifelse count innovation-1s > 0 and random 100 < 5
+      [let chunchu effect-of-imitation-innovation
+        set effect-of-imitation-innovation max [effect-of-independent-innovation] of innovation-1s
+        set innovation-cost ((effect-of-imitation-innovation) / (((1 - exp (- social-relations)) * ((exp innovation-ability) - 1) * D * 1.6) * J))
+        ifelse innovation-cost < floating-capital * 0.7
+         [set effect-of-innovation effect-of-innovation + (effect-of-imitation-innovation)
+          set product-price product-price + (random-normal effect-of-imitation-innovation 10)
+          set operating-expense operating-expense + ((random-normal effect-of-independent-innovation 10) / 300)
+          set floating-capital floating-capital - innovation-cost
+          set innovate 0
+          set mofangchuangxin-num mofangchuangxin-num + 1
+          hatch-innovation-2s 1
+            [set size 0.1
+             set shape "circle"
+             set color red
+             set effect-of-imitation-innovation [effect-of-imitation-innovation] of myself
+             set exist-time 0
+             set wailai? [wailai?] of myself
+            ]
+         ]
+         [set effect-of-imitation-innovation chunchu]]
+      [ifelse count innovation-1s in-radius 50 > 0
+       [let chunchu effect-of-imitation-innovation
+        set effect-of-imitation-innovation one-of [effect-of-independent-innovation] of innovation-1s in-radius 50
+        set innovation-cost ((effect-of-imitation-innovation) / (((1 - exp (- social-relations)) * ((exp innovation-ability) - 1) * D * 1.4) * J))
+        ifelse innovation-cost < floating-capital * 0.7
+         [set effect-of-innovation effect-of-innovation + (effect-of-imitation-innovation)
+          set product-price product-price + (random-normal effect-of-imitation-innovation 10)
+          set operating-expense operating-expense + ((random-normal effect-of-independent-innovation 10) / 300)
+          set floating-capital floating-capital - innovation-cost
+          set innovate 0
+          set mofangchuangxin-num mofangchuangxin-num + 1
+          hatch-innovation-2s 1
+            [set size 0.1
+             set shape "circle"
+             set color red
+             set effect-of-imitation-innovation [effect-of-imitation-innovation] of myself
+             set exist-time 0
+             set wailai? [wailai?] of myself
+            ]
+         ]
+         [set effect-of-imitation-innovation chunchu]]
+        [if count innovation-2s in-radius 50 > 0
+          [let chunchu effect-of-imitation-innovation
+           set effect-of-imitation-innovation one-of [effect-of-imitation-innovation] of innovation-2s in-radius 50
+           set innovation-cost ((effect-of-imitation-innovation) / (((1 - exp (- social-relations)) * ((exp innovation-ability) - 1) * D * 1.4) * J))
+           ifelse innovation-cost < floating-capital * 0.7
+             [set effect-of-innovation effect-of-innovation + (effect-of-imitation-innovation)
+              set product-price product-price + (random-normal effect-of-imitation-innovation 10)
+              set operating-expense operating-expense + ((random-normal effect-of-independent-innovation 10) / 300)
+              set floating-capital floating-capital - innovation-cost
+              set innovate 0
+              set mofangchuangxin-num mofangchuangxin-num + 1
+              hatch-innovation-2s 1
+               [set size 0.1
+                set shape "circle"
+                set color red
+                set effect-of-imitation-innovation [effect-of-imitation-innovation] of myself
+                set exist-time 0
+               ]]
+             [set effect-of-imitation-innovation chunchu]
+      ]]
+  ]]]
+  set new-innovations-2 count innovation-2s with [exist-time = 0]
+  ifelse new-innovations-2 > 0[set mean-imitation mean [effect-of-imitation-innovation] of innovation-2s with [exist-time = 0]][set mean-imitation 0]
+  set new-innovations-2-d count innovation-2s with [exist-time = 0 and not wailai?]
+  ifelse new-innovations-2-d > 0[set mean-imitation-d mean [effect-of-imitation-innovation] of innovation-2s with [exist-time = 0 and not wailai?]][set mean-imitation-d 0]
+  set new-innovations-2-w count innovation-2s with [exist-time = 0 and wailai?]
+  ifelse new-innovations-2-w > 0[set mean-imitation-w mean [effect-of-imitation-innovation] of innovation-2s with [exist-time = 0 and wailai?]][set mean-imitation-w 0]
+end
+
+to mofangchuangxin-increase;模仿创新（产生新代理记录创新效果，对周边产生影响，使模仿创新层层递进）-创新比例递增
+ ask entrepreneurs
+  [if innovate >= 10 and willingness-to-imitate-innovation > 0 and ((1 - exp (- willingness-to-imitate-innovation)) * 100) > random (100 / (J * increase))
+     [ifelse count innovation-1s > 0 and random 100 < 5
+      [let chunchu effect-of-imitation-innovation
+        set effect-of-imitation-innovation max [effect-of-independent-innovation] of innovation-1s
+        set innovation-cost ((effect-of-imitation-innovation) / (((1 - exp (- social-relations)) * ((exp innovation-ability) - 1) * D * 1.6) * J * increase))
+        ifelse innovation-cost < floating-capital * 0.7
+         [set effect-of-innovation effect-of-innovation + (effect-of-imitation-innovation)
+          set product-price product-price + (random-normal effect-of-imitation-innovation 10)
+          set operating-expense operating-expense + ((random-normal effect-of-independent-innovation 10) / 300)
+          set floating-capital floating-capital - innovation-cost
+          set innovate 0
+          set mofangchuangxin-num mofangchuangxin-num + 1
+          hatch-innovation-2s 1
+            [set size 0.1
+             set shape "circle"
+             set color red
+             set effect-of-imitation-innovation [effect-of-imitation-innovation] of myself
+             set exist-time 0
+             set wailai? [wailai?] of myself
+            ]
+         ]
+         [set effect-of-imitation-innovation chunchu]]
+      [ifelse count innovation-1s in-radius 50 > 0
+       [let chunchu effect-of-imitation-innovation
+        set effect-of-imitation-innovation one-of [effect-of-independent-innovation] of innovation-1s in-radius 50
+        set innovation-cost ((effect-of-imitation-innovation) / (((1 - exp (- social-relations)) * ((exp innovation-ability) - 1) * D * 1.4) * J * increase))
+        ifelse innovation-cost < floating-capital * 0.7
+         [set effect-of-innovation effect-of-innovation + (effect-of-imitation-innovation)
+          set product-price product-price + (random-normal effect-of-imitation-innovation 10)
+          set operating-expense operating-expense + ((random-normal effect-of-independent-innovation 10) / 300)
+          set floating-capital floating-capital - innovation-cost
+          set innovate 0
+          set mofangchuangxin-num mofangchuangxin-num + 1
+          hatch-innovation-2s 1
+            [set size 0.1
+             set shape "circle"
+             set color red
+             set effect-of-imitation-innovation [effect-of-imitation-innovation] of myself
+             set exist-time 0
+             set wailai? [wailai?] of myself
+            ]
+         ]
+         [set effect-of-imitation-innovation chunchu]]
+        [if count innovation-2s in-radius 50 > 0
+          [let chunchu effect-of-imitation-innovation
+           set effect-of-imitation-innovation one-of [effect-of-imitation-innovation] of innovation-2s in-radius 50
+           set innovation-cost ((effect-of-imitation-innovation) / (((1 - exp (- social-relations)) * ((exp innovation-ability) - 1) * D * 1.4) * J * increase))
+           ifelse innovation-cost < floating-capital * 0.7
+             [set effect-of-innovation effect-of-innovation + (effect-of-imitation-innovation)
+              set product-price product-price + (random-normal effect-of-imitation-innovation 10)
+              set operating-expense operating-expense + ((random-normal effect-of-independent-innovation 10) / 300)
+              set floating-capital floating-capital - innovation-cost
+              set innovate 0
+              set mofangchuangxin-num mofangchuangxin-num + 1
+              hatch-innovation-2s 1
+               [set size 0.1
+                set shape "circle"
+                set color red
+                set effect-of-imitation-innovation [effect-of-imitation-innovation] of myself
+                set exist-time 0
+               ]]
+             [set effect-of-imitation-innovation chunchu]
+      ]]
+  ]]]
+  set new-innovations-2 count innovation-2s with [exist-time = 0]
+  ifelse new-innovations-2 > 0[set mean-imitation mean [effect-of-imitation-innovation] of innovation-2s with [exist-time = 0]][set mean-imitation 0]
+  set new-innovations-2-d count innovation-2s with [exist-time = 0 and not wailai?]
+  ifelse new-innovations-2-d > 0[set mean-imitation-d mean [effect-of-imitation-innovation] of innovation-2s with [exist-time = 0 and not wailai?]][set mean-imitation-d 0]
+  set new-innovations-2-w count innovation-2s with [exist-time = 0 and wailai?]
+  ifelse new-innovations-2-w > 0[set mean-imitation-w mean [effect-of-imitation-innovation] of innovation-2s with [exist-time = 0 and wailai?]][set mean-imitation-w 0]
+end
+
+to youkechuyou;游客出游
+  set qiye patch-set [patch-here] of entrepreneurs
+  ask entrepreneurs [ask patch-here [set p-effect-of-innovation [effect-of-innovation] of myself
+                                     set p-product-price [product-price] of myself
+                                     set p-times 0]]
+  set income-lever-read initial-income-lever * income-lever-increase
+  loop[
+  ask qiye
+    [if (((0.95 - exp (-(attract / 200 * A2 + transport / 70 * B2 + p-effect-of-innovation / 1000 * G))) * 100) > random 100)
+      [sprout-tourists 1
+      [ set size 1
+        set shape "person"
+        set color green
+        set consumption-preference random-normal initial-consumption-preference 0.17624
+        set income-lever random-gamma (income-lever-read * income-lever-read / 433) (income-lever-read / 433)]]
+     ]
+  if count tourists > (num-tourists * tourist-increase)
+    [stop]]
+  ask tourists
+  [while [(consumption-preference < 0) or (consumption-preference > 1)]
+    [set consumption-preference random-normal initial-consumption-preference 0.17624]
+   while [income-lever < 50 or income-lever > 3000]
+    [set income-lever random-gamma (income-lever-read * income-lever-read / 433) (income-lever-read / 433)]]
+end
+
+
+to youkexiaofei;游客消费
+  set tourists-num count tourists
+  ask tourists
+   [set xiaofei-h (income-lever * exp consumption-preference * H)
+    set xiaofei-l (income-lever * ((ln (abs consumption-preference)) + 1) / H)
+    loop[
+     ask patch-here
+      [ifelse [income-lever] of myself < p-product-price
+       [if [xiaofei-h] of myself > p-product-price and p-times < 10
+          [set p-times p-times + 1
+           set deal deal + 1
+           set tingzhi? true]]
+       [if [xiaofei-l] of myself < p-product-price and p-times < 10
+          [set p-times p-times + 1
+           set deal deal + 1
+           set tingzhi? true]]]
+    ask one-of qiye in-radius 30
+      [ifelse [income-lever] of myself < p-product-price
+        [ifelse [xiaofei-h] of myself > p-product-price and not tingzhi? and p-times < 10
+          [set p-times p-times + 1
+           set deal deal + 1
+           set tingzhi? true]
+          [set selection-time selection-time + 1]]
+        [ifelse [xiaofei-l] of myself < p-product-price and not tingzhi? and p-times < 10
+          [set p-times p-times + 1
+           set deal deal + 1
+           set tingzhi? true]
+          [set selection-time selection-time + 1]]]
+     if tingzhi? or selection-time > 30
+      [set tingzhi? false
+       set selection-time 0
+       stop]]]
+  set num-deal deal
+end
+
+to qiyeshouru;企业收入
+  ask qiye [ask entrepreneurs-here [set times [p-times] of myself]]
+  ask entrepreneurs [set income times * product-price
+                     set income-j (income * 30 / 10000) - operating-expense
+                     set floating-capital floating-capital + income-j]
+end
+
+to qiyetuichu;企业重装与退出
+  ask entrepreneurs with [effect-of-innovation < 50]
+   [set floating-capital floating-capital - 30
+    set effect-of-innovation effect-of-innovation + 20
+    set product-price random-normal effect-of-innovation 10]
+  ask entrepreneurs with [not wailai?]
+    [if floating-capital < 0
+      [set death-d death-d + 1
+       set death-zizhu-d death-zizhu-d + zizhuchuangxin-num
+       set death-mofang-d death-mofang-d + mofangchuangxin-num
+       ask patch-here[set not-vacancy? true]
+       die]]
+  ask entrepreneurs with [wailai?]
+    [if floating-capital < 0
+      [set death-w death-w + 1
+       set death-zizhu-w death-zizhu-w + zizhuchuangxin-num
+       set death-mofang-w death-mofang-w + mofangchuangxin-num
+       ask patch-here[set not-vacancy? true]
+       die]]
+  set death-n-d death-d
+  set death-n-w death-w
+  set death-n death-n-d + death-n-w
+  set death-total-num death-total-num + death-n
+  set death-total-num-d death-total-num-d + death-n-d
+  set death-total-num-w death-total-num-w + death-n-w
+  set death-zizhu death-zizhu-d + death-zizhu-w
+  set death-mofang death-mofang-d + death-mofang-w
+  ask tourists [die]
+  ask innovation-1s with [exist-time > 18] [die]
+  ask innovation-2s with [exist-time > 18] [die]
+end
+
+to jisuanbiandonglv;计算变动率
+  if ticks > 0 and ticks <= 12[set tourist-increase tourist-increase * 1.00215
+                               set income-lever-increase income-lever-increase * 1.00214
+                               set operating-expense-increase operating-expense-increase * 0.99832
+                               set product-price-increase product-price-increase * 0.99840
+                               set operating-expense-increase-d 0.99832
+                               set product-price-increase-d 0.99840]
+  if ticks > 12 and ticks <= 24[set tourist-increase tourist-increase * 1.00927
+                                set income-lever-increase income-lever-increase * 1.00165
+                                set operating-expense-increase operating-expense-increase * 0.99815
+                                set product-price-increase product-price-increase * 0.99840
+                                set operating-expense-increase-d 0.99815
+                                set product-price-increase-d 0.99840]
+  if ticks > 24 and ticks <= 36[set tourist-increase tourist-increase * 1.00957
+                                set income-lever-increase income-lever-increase * 1.00116
+                                set operating-expense-increase operating-expense-increase * 0.99477
+                                set product-price-increase product-price-increase * 0.99556
+                                set operating-expense-increase-d 0.99477
+                                set product-price-increase-d 0.99556]
+  if ticks > 36 and ticks <= 48[set tourist-increase tourist-increase * 1.00889
+                                set income-lever-increase income-lever-increase * 1.00165
+                                set operating-expense-increase operating-expense-increase * 0.99832
+                                set product-price-increase product-price-increase * 0.99883
+                                set operating-expense-increase-d 0.99832
+                                set product-price-increase-d 0.99883]
+  if ticks > 48 and ticks <= 60[set tourist-increase tourist-increase * 1.00904
+                                set income-lever-increase income-lever-increase * 1.00132
+                                set operating-expense-increase operating-expense-increase * 1.00651
+                                set product-price-increase product-price-increase * 1.00510
+                                set operating-expense-increase-d 1.00651
+                                set product-price-increase-d 1.00510]
+  if ticks > 60 and ticks <= 72[set tourist-increase tourist-increase * 1.00979
+                                set income-lever-increase income-lever-increase * 1.00173
+                                set operating-expense-increase operating-expense-increase * 1.00335
+                                set product-price-increase product-price-increase * 1.00287
+                                set operating-expense-increase-d 1.00335
+                                set product-price-increase-d 1.00287]
+  if ticks > 72 and ticks <= 84[set tourist-increase tourist-increase * 1.01121
+                                set income-lever-increase income-lever-increase * 1.00239
+                                set operating-expense-increase operating-expense-increase * 0.99941
+                                set product-price-increase product-price-increase * 0.99975
+                                set operating-expense-increase-d 0.99941
+                                set product-price-increase-d 0.99975]
+  if ticks > 84 and ticks <= 96[set tourist-increase tourist-increase * 0.95912
+                                set income-lever-increase income-lever-increase * 1.00206
+                                set operating-expense-increase operating-expense-increase * 0.99806
+                                set product-price-increase product-price-increase * 0.99849
+                                set operating-expense-increase-d 0.99806
+                                set product-price-increase-d 0.99849]
+  if ticks > 96 and ticks <= 108[set tourist-increase tourist-increase * 1.03222
+                                 set income-lever-increase income-lever-increase * 1.00075
+                                 set operating-expense-increase operating-expense-increase * 1.00873
+                                 set product-price-increase product-price-increase * 1.00651
+                                 set operating-expense-increase-d 1.00873
+                                 set product-price-increase-d 1.00651]
+  if ticks > 108 and ticks <= 120[set tourist-increase tourist-increase * 0.98694
+                                  set income-lever-increase income-lever-increase * 1.00165
+                                  set operating-expense-increase operating-expense-increase * 1.00495
+                                  set product-price-increase product-price-increase * 1.00335
+                                  set operating-expense-increase-d 1.00495
+                                  set product-price-increase-d 1.00335]
+end
+
+to chuangxinbiaoji;创新标记累计、自主创新意愿、模仿创新意愿
+  set deal 0
+  set death-d 0
+  set death-w 0
+  ask qiye [set p-times 0]
+  ifelse death-zizhu = 0[ set mean-zizhu 0][set mean-zizhu death-zizhu / death-total-num]
+  ifelse death-mofang = 0[ set mean-mofang 0][set mean-mofang death-mofang / death-total-num]
+  ifelse death-zizhu-w = 0[ set mean-zizhu-w 0][set mean-zizhu-w death-zizhu-w / death-total-num-w]
+  ifelse death-mofang-w = 0[ set mean-mofang-w 0][set mean-mofang-w death-mofang-w / death-total-num-w]
+  ifelse death-zizhu-d = 0[ set mean-zizhu-d 0][set mean-zizhu-d death-zizhu-d / death-total-num-d]
+  ifelse death-mofang-d = 0[ set mean-mofang-d 0][set mean-mofang-d death-mofang-d / death-total-num-d]
+  ask entrepreneurs [set times 0
+                     set innovate innovate + random-normal 1 1
+                     set years years + 1
+                     ifelse effect-of-innovation < max [effect-of-innovation] of entrepreneurs in-radius 50
+                       [set operating-pressure (max [effect-of-innovation] of entrepreneurs in-radius 50 - effect-of-innovation) + count entrepreneurs in-radius 50]
+                       [set operating-pressure 10  + count entrepreneurs in-radius 50]
+                     set overflow-effect ((count innovation-1s in-radius 50) * 0.8) + ((count innovation-2s in-radius 50) * 0.2)
+                     set willingness-to-innovate-independently (operating-pressure * (exp (innovation-preference) * exp (innovation-ability)))
+                     set willingness-to-imitate-innovation (overflow-effect * (exp innovation-ability) * (1 - (exp (-(social-relations)))))
+                     set effect-of-innovation effect-of-innovation - sunhao
+                     if product-price * 0.75 > effect-of-innovation[set product-price random-normal effect-of-innovation 10]
+                     set product-price product-price * product-price-increase-d
+                     set effect-of-innovation effect-of-innovation * product-price-increase-d
+                     set operating-expense operating-expense * operating-expense-increase-d]
+  ask innovation-1s [set exist-time exist-time + 1]
+  ask innovation-2s [set exist-time exist-time + 1]
+end
+
+to jianyan;最近邻指数及覆盖率检验
+  ask jianyan-hs [ifelse count entrepreneurs in-radius 5 > 0[set fugai-2? true][set fugai-2? false]
+                  ifelse count entrepreneurs in-radius 15 > 0[set fugai-5? true][set fugai-5? false]]
+  ask entrepreneurs [ifelse count jianyan-hs in-radius 5 > 0[set chenggong-2? true][set chenggong-2? false]
+                     ifelse count jianyan-hs in-radius 15 > 0[set chenggong-5? true][set chenggong-5? false]]
+  set xianshi-2 ((count jianyan-hs with [fugai-2?]) / (count jianyan-hs))
+  set xianshi-5 ((count jianyan-hs with [fugai-5?]) / (count jianyan-hs))
+  set chenggonglv-2 ((count entrepreneurs with [chenggong-2?]) / (count entrepreneurs))
+  set chenggonglv-5 ((count entrepreneurs with [chenggong-5?]) / (count entrepreneurs))
+  ifelse xianshi-2 < chenggonglv-2[set fugailv-2 xianshi-2][set fugailv-2 chenggonglv-2]
+  ifelse xianshi-5 < chenggonglv-5[set fugailv-5 xianshi-5][set fugailv-5 chenggonglv-5]
+  set x int (count entrepreneurs * 0.25)
+  set x-d int (count entrepreneurs with [not wailai?] * 0.25)
+  set x-w int (count entrepreneurs with [wailai?] * 0.25)
+  set price-25 min [product-price] of max-n-of x entrepreneurs [product-price]
+  set price-75 max [product-price] of min-n-of x entrepreneurs [product-price]
+  set price-25-d min [product-price] of max-n-of x-d entrepreneurs with [not wailai?] [product-price]
+  set price-75-d max [product-price] of min-n-of x-d entrepreneurs with [not wailai?] [product-price]
+  ifelse count entrepreneurs with [wailai?] < 4[set price-25-w 0
+                  set price-75-w 0
+                  set income-j-25-w 0
+                  set income-j-75-w 0]
+  [set price-25-w min [product-price] of max-n-of x-w entrepreneurs with [wailai?] [product-price]
+   set price-75-w max [product-price] of min-n-of x-w entrepreneurs with [wailai?] [product-price]
+   set income-j-25-w min [income-j] of max-n-of x-w entrepreneurs with [wailai?] [income-j]
+   set income-j-75-w max [income-j] of min-n-of x-w entrepreneurs with [wailai?] [income-j]]
+  set income-j-25-d min [income-j] of max-n-of x-d entrepreneurs with [not wailai?] [income-j]
+  set income-j-75-d max [income-j] of min-n-of x-d entrepreneurs with [not wailai?] [income-j]
+  set years-25 min [years] of max-n-of x entrepreneurs [years]
+  set years-75 max [years] of min-n-of x entrepreneurs [years]
+end
+
+to creation-the-operator;企业进入
+  set mean-income mean [income] of entrepreneurs * 0.7
+  set operating-expense-read-d operating-expense-d * operating-expense-increase
+  set operating-expense-read-w operating-expense-w * operating-expense-increase
+  set effect-of-innovation-read-d effect-of-innovation-d * product-price-increase
+  set effect-of-innovation-read-w effect-of-innovation-w * product-price-increase
+  ask qianzaiyongdi with [not-vacancy?]
+    [if qiyexuanzhi > random (2000 + (num-deal / tourists-num * 1500))
+      [ifelse random 100 > 13
+       [ifelse random 100 > 25
+        [if count entrepreneurs in-radius 100 > 0
+          [if mean [income] of entrepreneurs in-radius 100 > mean-income
+            [sprout-entrepreneurs 1
+              [ set size 1.5
+                set shape "circle"
+                set color red
+                set years 0
+                set innovation-preference random-normal innovation-preference-d 0.19759
+                set innovation-ability random-normal innovation-ability-d 0.18103
+                set social-relations random-normal social-relations-d 0.15578
+                set floating-capital random-gamma (floating-capital-d * floating-capital-d / 40) (floating-capital-d / 40)
+                set operating-expense random-gamma (operating-expense-read-d * operating-expense-read-d / 1.2) (operating-expense-read-d / 1.2)
+                set effect-of-innovation random-gamma (effect-of-innovation-read-d * effect-of-innovation-read-d / 500) (effect-of-innovation-read-d / 500)
+                set product-price random-normal effect-of-innovation 10
+                set new? true
+                set chenggong-2? false
+                set chenggong-5? false
+                set wailai? false
+                set zizhuchuangxin-num 0
+                set mofangchuangxin-num 0
+              ]
+            set not-vacancy? false
+            ]
+          ]
+        ]
+        [sprout-entrepreneurs 1
+         [ set size 1.5
+           set shape "circle"
+           set color red
+           set years 0
+           set innovation-preference random-normal innovation-preference-d 0.19759
+           set innovation-ability random-normal innovation-ability-d 0.18103
+           set social-relations random-normal social-relations-d 0.15578
+           set floating-capital random-gamma (floating-capital-d * floating-capital-d / 40) (floating-capital-d / 40)
+           set operating-expense random-gamma (operating-expense-read-d * operating-expense-read-d / 1.2) (operating-expense-read-d / 1.2)
+           set effect-of-innovation random-gamma (effect-of-innovation-read-d * effect-of-innovation-read-d / 500) (effect-of-innovation-read-d / 500)
+           set product-price random-normal effect-of-innovation 10
+           set new? true
+           set chenggong-2? false
+           set chenggong-5? false
+           set wailai? false
+           set zizhuchuangxin-num 0
+           set mofangchuangxin-num 0
+          ]
+        set not-vacancy? false]
+      ]
+        [ifelse random 100 > 25
+        [if count entrepreneurs in-radius 100 > 0
+          [if mean [income] of entrepreneurs in-radius 100 > mean-income
+            [sprout-entrepreneurs 1
+              [ set size 1.5
+                set shape "circle"
+                set color red
+                set years 0
+                set innovation-preference random-normal innovation-preference-w 0.19589
+                set innovation-ability random-normal innovation-ability-w 0.15727
+                set social-relations random-normal social-relations-w 0.17844
+                set floating-capital random-gamma (floating-capital-w * floating-capital-w / 40) (floating-capital-w / 40)
+                set operating-expense random-gamma (operating-expense-read-w * operating-expense-read-w / 1.2) (operating-expense-read-w / 1.2)
+                set effect-of-innovation random-gamma (effect-of-innovation-read-w * effect-of-innovation-read-w / 500) (effect-of-innovation-read-w / 500)
+                set product-price random-normal effect-of-innovation 10
+                set new? true
+                set chenggong-2? false
+                set chenggong-5? false
+                set wailai? true
+                set zizhuchuangxin-num 0
+                set mofangchuangxin-num 0
+              ]
+            set not-vacancy? false
+            ]
+          ]]
+          [sprout-entrepreneurs 1
+         [ set size 1.5
+           set shape "circle"
+           set color red
+           set years 0
+           set innovation-preference random-normal innovation-preference-w 0.19589
+           set innovation-ability random-normal innovation-ability-w 0.15727
+           set social-relations random-normal social-relations-w 0.17844
+           set floating-capital random-gamma (floating-capital-w * floating-capital-w / 40) (floating-capital-w / 40)
+           set operating-expense random-gamma (operating-expense-read-w * operating-expense-read-w / 1.2) (operating-expense-read-w / 1.2)
+           set effect-of-innovation random-gamma (effect-of-innovation-read-w * effect-of-innovation-read-w / 500) (effect-of-innovation-read-w / 500)
+           set product-price random-normal effect-of-innovation 10
+           set new? true
+           set chenggong-2? false
+           set chenggong-5? false
+           set wailai? true
+           set zizhuchuangxin-num 0
+           set mofangchuangxin-num 0
+        ]
+            set not-vacancy? false]]]
+     ]
+  set new count entrepreneurs with [new?]
+  set new-d count entrepreneurs with [new? and not wailai?]
+  set new-w count entrepreneurs with [new? and wailai?]
+  ask entrepreneurs with [new? = true]
+  [ifelse wailai?
+    [while [innovation-preference < 0 or innovation-preference > 1]
+    [set innovation-preference random-normal innovation-preference-w 0.19589]
+   while [innovation-ability < 0 or innovation-ability > 1]
+    [set innovation-ability random-normal innovation-ability-w 0.15727]
+   while [social-relations < 0 or social-relations > 1]
+    [set social-relations random-normal social-relations-w 0.17844]
+   while [floating-capital < 10 or floating-capital > 80]
+    [set floating-capital random-gamma (floating-capital-w * floating-capital-w / 40) (floating-capital-w / 40)]
+   while [operating-expense < 3 or operating-expense > 12]
+    [set operating-expense random-gamma (operating-expense-read-w * operating-expense-read-w / 1.2) (operating-expense-read-w / 1.2)]
+   while [effect-of-innovation < 150 or effect-of-innovation > 3000]
+    [set effect-of-innovation random-gamma (effect-of-innovation-read-w * effect-of-innovation-read-w / 500) (effect-of-innovation-read-w / 500)
+     set product-price random-normal effect-of-innovation 10]
+   ifelse effect-of-innovation < max [effect-of-innovation] of entrepreneurs in-radius 50
+    [set operating-pressure (max [effect-of-innovation] of entrepreneurs in-radius 50 - effect-of-innovation) + count entrepreneurs in-radius 50]
+    [set operating-pressure 10  + count entrepreneurs in-radius 50]
+   set overflow-effect ((count innovation-1s in-radius 50) * 0.8) + ((count innovation-2s in-radius 50) * 0.2)
+   set willingness-to-innovate-independently (operating-pressure * (exp (innovation-preference) * exp (innovation-ability)))
+   set willingness-to-imitate-innovation (overflow-effect * (exp innovation-ability) * (1 - (exp (-(social-relations)))))
+   set new? false]
+    [while [innovation-preference < 0 or innovation-preference > 1]
+    [set innovation-preference random-normal innovation-preference-d 0.19759]
+   while [innovation-ability < 0 or innovation-ability > 1]
+    [set innovation-ability random-normal innovation-ability-d 0.18103]
+   while [social-relations < 0 or social-relations > 1]
+    [set social-relations random-normal social-relations-d 0.15578]
+   while [floating-capital < 1 or floating-capital > 50]
+    [set floating-capital random-gamma (floating-capital-d * floating-capital-d / 40) (floating-capital-d / 40)]
+   while [operating-expense < 0.5 or operating-expense > 8]
+    [set operating-expense random-gamma (operating-expense-read-d * operating-expense-read-d / 1.2) (operating-expense-read-d / 1.2)]
+   while [effect-of-innovation < 50 or effect-of-innovation > 3000]
+    [set effect-of-innovation random-gamma (effect-of-innovation-read-d * effect-of-innovation-read-d / 500) (effect-of-innovation-read-d / 500)
+     set product-price random-normal effect-of-innovation 10]
+   ifelse effect-of-innovation < max [effect-of-innovation] of entrepreneurs in-radius 50
+    [set operating-pressure (max [effect-of-innovation] of entrepreneurs in-radius 50 - effect-of-innovation) + count entrepreneurs in-radius 50]
+    [set operating-pressure 10  + count entrepreneurs in-radius 50]
+   set innovate 11
+   set overflow-effect ((count innovation-1s in-radius 50) * 0.8) + ((count innovation-2s in-radius 50) * 0.2)
+   set willingness-to-innovate-independently (operating-pressure * (exp (innovation-preference) * exp (innovation-ability)))
+   set willingness-to-imitate-innovation (overflow-effect * (exp innovation-ability) * (1 - (exp (-(social-relations)))))
+   set new? false]
+  ]
+end
